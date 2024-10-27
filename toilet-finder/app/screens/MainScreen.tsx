@@ -1,13 +1,35 @@
-import { SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import {
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import React, { useState } from "react";
 import { Platform } from "react-native";
 
+import Feather from "@expo/vector-icons/Feather";
+import AntDesign from "@expo/vector-icons/AntDesign";
+
 function MainScreen() {
+  const [isSearching, setSearch] = useState(false);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.menu}></View>
-        <Text style={styles.headerText}>Toilet Finder</Text>
+        <Feather name="menu" size={35} color="black" />
+        <View style={styles.middle}>
+          {isSearching ? (
+            <TextInput placeholder="Select location" style={styles.searchBar} />
+          ) : (
+            <Text style={styles.headerText}>Toilet Finder</Text>
+          )}
+        </View>
+        <TouchableWithoutFeedback onPress={() => setSearch(true)}>
+          <AntDesign name="search1" size={24} color="black" />
+        </TouchableWithoutFeedback>
       </View>
       <View style={styles.map}>
         <Text>Map</Text>
@@ -28,6 +50,7 @@ const styles = StyleSheet.create({
     height: 50,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     ...padding(0, 20),
   },
   headerText: {
@@ -38,11 +61,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  menu: {
-    width: 50,
-    height: 50,
-    backgroundColor: "#000",
-    marginRight: 20,
+  menuLeft: {
+    flexDirection: "row",
+  },
+  middle: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  searchBar: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+    flex: 1,
   },
 });
 
