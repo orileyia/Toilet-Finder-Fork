@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   },
   sidebar: {
     position: "absolute",
-    top: 50,
+    top: 60,
     left: 0,
     width: 250,
     height: "100%",
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     position: "absolute",
-    top: 50,
+    top: 60,
     left: 0,
     width: "100%",
     height: "100%",

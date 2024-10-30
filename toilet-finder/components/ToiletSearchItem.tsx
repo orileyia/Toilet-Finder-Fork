@@ -17,11 +17,7 @@ function ToiletSearchItem() {
       }}
     >
       <View style={styles.container}>
-        <Image
-          style={styles.Image}
-          source={require("../assets/toilet1.jpg")}
-          resizeMode="contain"
-        />
+        
         <Text style={styles.address}>Adress: Vladislav Varnenchik 52</Text>
         <Text style={styles.distance}>2km</Text>
       </View>
