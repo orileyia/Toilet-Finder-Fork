@@ -1,17 +1,12 @@
-import { SafeAreaView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
-import { Platform } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
 
-import Header from "../components/Header";
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
 function Index() {
   return (
-    <SafeAreaView style={styles.container}>
-      <Header />
-      
+    <>
       {/*<MapView />*/}
 
       <TouchableOpacity style={styles.bottomLeftButton}>
@@ -20,17 +15,13 @@ function Index() {
       <TouchableOpacity style={styles.bottomRightButton}>
         <FontAwesome6 name="location-crosshairs" size={24} color="white" />
       </TouchableOpacity>
-    </SafeAreaView>
+    </>
   );
 }
 
 export default Index;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-  },
   bottomLeftButton: {
     position: "absolute",
     bottom: 20,

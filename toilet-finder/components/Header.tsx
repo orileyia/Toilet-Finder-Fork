@@ -7,17 +7,19 @@ import {
   Animated,
   TouchableOpacity,
 } from "react-native";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import Feather from "@expo/vector-icons/Feather";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 import { padding } from "../scripts/utils";
+import { Link, usePathname } from "expo-router";
 
-const Header = () => {
+function Header() {
   const [isSearching, setSearch] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
   const slideAnim = useRef(new Animated.Value(-250)).current;
+  const pathname = usePathname();
 
   const toggleMenu = () => {
     //sidebar animation
@@ -36,6 +38,16 @@ const Header = () => {
       }).start();
     }
   };
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      Animated.timing(slideAnim, {
+        toValue: -250,
+        duration: 300,
+        useNativeDriver: true,
+      }).start(() => setMenuOpen(false));
+    }
+  }, [pathname]);
 
   return (
     <>
@@ -64,7 +76,9 @@ const Header = () => {
               style={styles.searchBar}
             />
           ) : (
-            <Text style={styles.headerText}>Toilet Finder</Text>
+            <Link href="/" style={styles.headerText}>
+              Toilet Finder
+            </Link>
           )}
         </View>
         <TouchableWithoutFeedback onPress={() => setSearch(true)}>
@@ -78,14 +92,18 @@ const Header = () => {
       <Animated.View
         style={[styles.sidebar, { transform: [{ translateX: slideAnim }] }]}
       >
-        <Text style={styles.sidebarText}>Log in</Text>
-        <Text style={styles.sidebarText}>Register</Text>
+        <Link href="/LoginScreen" style={styles.sidebarText}>
+          Log in
+        </Link>
+        <Link href="/RegisterScreen" style={styles.sidebarText}>
+          Register
+        </Link>
         <Text style={styles.sidebarText}>Settings</Text>
         <Text style={styles.sidebarText}>Help</Text>
       </Animated.View>
     </>
   );
-};
+}
 
 export default Header;
 
