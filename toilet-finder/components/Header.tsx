@@ -2,7 +2,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableWithoutFeedback,
+  Pressable,
   View,
   Animated,
   TouchableOpacity,
@@ -52,9 +52,7 @@ function Header() {
   return (
     <>
       <View style={styles.header}>
-        <TouchableWithoutFeedback
-          onPress={isSearching ? () => setSearch(false) : toggleMenu}
-        >
+        <Pressable onPress={isSearching ? () => setSearch(false) : toggleMenu}>
           {isSearching ? (
             <AntDesign name="arrowleft" size={35} color="white" />
           ) : isMenuOpen ? (
@@ -67,7 +65,7 @@ function Header() {
           ) : (
             <Feather name="menu" size={35} color="white" onPress={toggleMenu} />
           )}
-        </TouchableWithoutFeedback>
+        </Pressable>
         <View style={styles.middle}>
           {isSearching ? (
             <TextInput
@@ -81,9 +79,9 @@ function Header() {
             </Link>
           )}
         </View>
-        <TouchableWithoutFeedback onPress={() => setSearch(true)}>
+        <Pressable onPress={() => setSearch(true)}>
           <AntDesign name="search1" size={24} color="white" />
-        </TouchableWithoutFeedback>
+        </Pressable>
       </View>
 
       {isMenuOpen && (
