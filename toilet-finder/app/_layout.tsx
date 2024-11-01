@@ -2,7 +2,7 @@ import { Platform, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import { Slot } from "expo-router";
 import Header from "../components/Header";
 
-function Layout() {
+export default function Layout() {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
@@ -11,8 +11,6 @@ function Layout() {
     </SafeAreaView>
   );
 }
-
-export default Layout;
 
 const styles = StyleSheet.create({
   container: {

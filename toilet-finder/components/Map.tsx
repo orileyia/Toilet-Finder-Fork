@@ -72,22 +72,22 @@ Mapbox.setAccessToken(
   "pk.eyJ1IjoiaG9nb3RvIiwiYSI6ImNsM3B2ZWkyMjA2YXUzam1zcHZtazlpbXkifQ.O37qtLHrUTSjH91IveGMOg"
 );
 
-const startCoordinate = [27.910543, 43.204666]; //Varna
+const startCoordinate = [27.910543, 43.204666]; // Varna
 
-function Map() {
+export default function Map() {
   const camera = useRef<Mapbox.Camera>(null);
-  // Function to find and center on user location
+  // function to find and center on user location
   const snapToUser = async () => {
-    // Request permissions
-    //how to check if the app already has permissions
+    //  Request permissions
+    // how to check if the app already has permissions
     let { granted } = await Location.requestForegroundPermissionsAsync();
     if (!granted) {
       return;
     }
 
-    //got permission
+    // got permission
 
-    // Get current location
+    //  Get current location
     let location = await Location.getCurrentPositionAsync({});
     const { latitude, longitude } = location.coords;
     console.log([longitude, latitude]);
@@ -102,7 +102,7 @@ function Map() {
     Mapbox.setTelemetryEnabled(false);
   }, []);
 
-  //load toilet pins
+  // load toilet pins
   const toiletPoints = toiletsData.map((d) => point(d.coordinates));
 
   return (
@@ -139,8 +139,6 @@ function Map() {
     </>
   );
 }
-
-export default Map;
 
 const styles = StyleSheet.create({
   bottomLeftButton: {

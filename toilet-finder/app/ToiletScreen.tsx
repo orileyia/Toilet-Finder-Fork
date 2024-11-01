@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
-function ToiletScreen() {
+export default function ToiletScreen() {
   const [rating, setRating] = useState(0);
 
   const handleRating = (rate: number) => {
@@ -42,8 +42,6 @@ function ToiletScreen() {
     </View>
   );
 }
-
-export default ToiletScreen;
 
 const styles = StyleSheet.create({
   container: {

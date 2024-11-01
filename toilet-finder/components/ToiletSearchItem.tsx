@@ -1,31 +1,28 @@
 import { Image, StyleSheet, Text, View, Pressable } from "react-native";
 import React from "react";
 import { padding } from "../scripts/utils";
-//import { useRouter } from "expo-router";
+// import { useRouter } from "expo-router";
 
 type ToiletSearchItemProps = {
   imgSrc: string;
 };
 
-function ToiletSearchItem() {
-  //const router = useRouter();
+export default function ToiletSearchItem() {
+  // const router = useRouter();
 
   return (
     <Pressable
       onPress={() => {
-        //router.push("/screens/ToiletScreen");
+        // router.push("/screens/ToiletScreen");
       }}
     >
       <View style={styles.container}>
-        
         <Text style={styles.address}>Adress: Vladislav Varnenchik 52</Text>
         <Text style={styles.distance}>2km</Text>
       </View>
     </Pressable>
   );
 }
-
-export default ToiletSearchItem;
 
 const styles = StyleSheet.create({
   Image: {

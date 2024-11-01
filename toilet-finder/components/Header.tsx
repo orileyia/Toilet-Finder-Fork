@@ -15,14 +15,14 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { padding } from "../scripts/utils";
 import { Link, usePathname } from "expo-router";
 
-function Header() {
+export default function Header() {
   const [isSearching, setSearch] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
   const slideAnim = useRef(new Animated.Value(-250)).current;
   const pathname = usePathname();
 
   const toggleMenu = () => {
-    //sidebar animation
+    // sidebar animation
     if (isMenuOpen) {
       Animated.timing(slideAnim, {
         toValue: -250,
@@ -102,8 +102,6 @@ function Header() {
     </>
   );
 }
-
-export default Header;
 
 const styles = StyleSheet.create({
   header: {

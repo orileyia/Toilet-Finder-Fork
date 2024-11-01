@@ -3,10 +3,8 @@ import React from "react";
 
 import Map from "@/components/Map";
 
-function Index() {
+export default function Index() {
   return <Map />;
 }
-
-export default Index;
 
 const styles = StyleSheet.create({});
