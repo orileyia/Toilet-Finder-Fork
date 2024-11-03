@@ -5,40 +5,43 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  GestureResponderEvent,
 } from "react-native";
 
-const RegisterScreen = () => {
+const handleRegister: (event: GestureResponderEvent) => void = (e) => {
+  console.log("tried to register");
+};
+
+export default function RegisterScreen() {
   return (
     <View style={styles.container}>
-      <View style={styles.form}>
-        <Text style={styles.title}>Register Form</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Username"
-          placeholderTextColor="#999"
-          autoCapitalize="none"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          placeholderTextColor="#999"
-          secureTextEntry
-          autoCapitalize="none"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Confirm Password"
-          placeholderTextColor="#999"
-          secureTextEntry
-          autoCapitalize="none"
-        />
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Register</Text>
-        </TouchableOpacity>
-      </View>
+      <Text style={styles.title}>Register Form</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Username"
+        placeholderTextColor="#999"
+        autoCapitalize="none"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        placeholderTextColor="#999"
+        secureTextEntry
+        autoCapitalize="none"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Confirm Password"
+        placeholderTextColor="#999"
+        secureTextEntry
+        autoCapitalize="none"
+      />
+      <TouchableOpacity style={styles.button} onPress={handleRegister}>
+        <Text style={styles.buttonText}>Register</Text>
+      </TouchableOpacity>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -47,10 +50,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 16,
     backgroundColor: "#fff",
-  },
-  form: {
-    alignItems: "center",
-    marginTop: 10,
   },
   title: {
     fontSize: 20,

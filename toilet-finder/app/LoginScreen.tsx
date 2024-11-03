@@ -5,33 +5,60 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  GestureResponderEvent,
 } from "react-native";
 
-const LoginScreen = () => {
+const handleLogin: (event: GestureResponderEvent) => void = (e) => {
+  console.log("send log in request");
+
+  // send log in request
+  fetch("http://localhost/My%20sites/Toilet%20Finder%20Server/api/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: "john@example.com",
+      password: "1234",
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json(); // parse JSON response if needed
+    })
+    .then((data) => {
+      console.log("Success:", data); // handle response data
+    })
+    .catch((error) => {
+      console.error("Error:", error); // handle errors
+    });
+};
+
+export default function LoginScreen() {
   return (
     <View style={styles.container}>
-      <View style={styles.form}>
-        <Text style={styles.title}>Login Form</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Username"
-          placeholderTextColor="#999"
-          autoCapitalize="none"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          placeholderTextColor="#999"
-          secureTextEntry
-          autoCapitalize="none"
-        />
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-      </View>
+      <Text style={styles.title}>Login Form</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Username"
+        placeholderTextColor="#999"
+        autoCapitalize="none"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        placeholderTextColor="#999"
+        secureTextEntry
+        autoCapitalize="none"
+      />
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -40,10 +67,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 16,
     backgroundColor: "#fff",
-  },
-  form: {
-    alignItems: "center",
-    marginTop: 10,
   },
   title: {
     fontSize: 20,
