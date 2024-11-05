@@ -1,11 +1,21 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
-import { FontAwesome5, FontAwesome6 } from "@expo/vector-icons";
 import * as Location from "expo-location";
+import $ from "jquery";
+import { featureCollection, point } from "@turf/helpers";
 
-const toiletPinPath = "@/assets/images/toilet-pin.png";
-const toiletsData = [
+import { FontAwesome5, FontAwesome6 } from "@expo/vector-icons";
+import { router } from "expo-router";
+
+type ToiletData = {
+  coordinates: [number, number];
+  toilet_rating: number;
+  price: number;
+};
+
+const toiletPinPath = "../assets/images/toilet-pin.png";
+const toiletsData: ToiletData[] = [
   {
     coordinates: [27.9197, 43.2156],
     toilet_rating: 8,
@@ -77,8 +87,64 @@ export default function Map() {
       zoom: 11,
     });
 
+    if (!mapRef.current) throw new Error("Map is not set");
+
     //load markers
-    //marker el
+    const toiletPoints = toiletsData.map((d, idx) =>
+      point(d.coordinates, { idx: idx })
+    );
+    const toiletFeatures = featureCollection(toiletPoints);
+
+    mapRef.current.on("load", () => {
+      if (!mapRef.current) throw new Error("Map is not set");
+
+      mapRef.current.loadImage(toiletPinPath, (error, image) => {
+        if (error) throw error;
+        if (!mapRef.current) throw new Error("Map is not set");
+
+        if (!image) throw new Error("Toilet pin image failed to load");
+
+        // Add the image to the map
+        mapRef.current.addImage("toilet-pin", image);
+
+        mapRef.current.addSource("markers", {
+          type: "geojson",
+          data: toiletFeatures,
+        });
+
+        // Add a layer to display the markers
+        mapRef.current.addLayer({
+          id: "toiletPins",
+          type: "symbol",
+          source: "markers",
+          layout: {
+            "icon-image": "toilet-pin",
+            "icon-allow-overlap": true,
+          },
+        });
+
+        mapRef.current.on("click", "toiletPins", (e) => {
+          if (!mapRef.current) throw new Error("Map is not set");
+
+          const features = mapRef.current.queryRenderedFeatures(e.point, {
+            layers: ["toiletPins"],
+          });
+
+          if (features.length) {
+            const feature = features[0]; // Get the clicked feature
+
+            //get toilet info
+            if (!feature.properties)
+              throw new Error("Toilet pin properties not set");
+
+            const toiletId = feature.properties.idx as number;
+
+            //how do I make the ToiletScreen load with the selected toilet - context or dynamic route
+            //router.push(`/ToiletScreen/${toiletId}`);
+          }
+        });
+      });
+    });
 
     return () => {
       if (mapRef.current) mapRef.current.remove();
