@@ -11,8 +11,7 @@ import Mapbox, {
 import * as Location from "expo-location";
 import { featureCollection, point } from "@turf/helpers";
 
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { FontAwesome5, FontAwesome6 } from "@expo/vector-icons";
 
 const toiletPin = require("@/assets/images/toilet-pin.png");
 const toiletsData = [
@@ -90,7 +89,6 @@ export default function Map() {
     //  Get current location
     let location = await Location.getCurrentPositionAsync({});
     const { latitude, longitude } = location.coords;
-    console.log([longitude, latitude]);
 
     camera.current?.setCamera({
       centerCoordinate: [longitude, latitude],

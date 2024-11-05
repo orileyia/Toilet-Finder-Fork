@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   Text,
@@ -7,36 +7,26 @@ import {
   StyleSheet,
   GestureResponderEvent,
 } from "react-native";
-
-const handleLogin: (event: GestureResponderEvent) => void = (e) => {
-  console.log("send log in request");
-
-  // send log in request
-  fetch("http://localhost/My%20sites/Toilet%20Finder%20Server/api/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email: "john@example.com",
-      password: "1234",
-    }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json(); // parse JSON response if needed
-    })
-    .then((data) => {
-      console.log("Success:", data); // handle response data
-    })
-    .catch((error) => {
-      console.error("Error:", error); // handle errors
-    });
-};
+import $ from "jquery";
 
 export default function LoginScreen() {
+  const [email, setEmail] = useState("");
+  const [password, setPass] = useState("");
+
+  const handleLogin: (event: GestureResponderEvent) => void = (e) => {
+    $.ajax({
+      url: "http://localhost/My%20sites/Toilet%20Finder%20Server/api/login.php",
+      type: "POST",
+      data: {
+        email: email,
+        password: password,
+      },
+      success: (d) => {
+        console.log(d);
+      },
+    });
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login Form</Text>
@@ -45,6 +35,7 @@ export default function LoginScreen() {
         placeholder="Username"
         placeholderTextColor="#999"
         autoCapitalize="none"
+        onChangeText={setEmail}
       />
       <TextInput
         style={styles.input}
@@ -52,6 +43,7 @@ export default function LoginScreen() {
         placeholderTextColor="#999"
         secureTextEntry
         autoCapitalize="none"
+        onChangeText={setPass}
       />
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
