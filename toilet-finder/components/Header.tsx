@@ -90,6 +90,9 @@ export default function Header() {
       <Animated.View
         style={[styles.sidebar, { transform: [{ translateX: slideAnim }] }]}
       >
+        <Link href="/" style={styles.sidebarText}>
+          Home
+        </Link>
         <Link href="/LoginScreen" style={styles.sidebarText}>
           Log in
         </Link>

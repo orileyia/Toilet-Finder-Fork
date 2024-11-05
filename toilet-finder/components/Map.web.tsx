@@ -104,8 +104,12 @@ export default function Map() {
       throw new Error("Map not loaded yet");
     }
 
-    mapRef.current.setCenter([longitude, latitude]);
-    mapRef.current.setZoom(15);
+    mapRef.current.flyTo({
+      center: [longitude, latitude],
+      zoom: 15,
+      essential: true,
+      duration: 1500,
+    });
   };
 
   return (
