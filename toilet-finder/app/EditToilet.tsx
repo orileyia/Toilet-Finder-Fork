@@ -1,12 +1,23 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, Alert, TouchableWithoutFeedback } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState, useRef } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Alert,
+  TouchableWithoutFeedback,
+  Button,
+  Pressable,
+} from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import { Ionicons } from "@expo/vector-icons";
 
 const EditToiletScreen = () => {
-  const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
-  const [price, setPrice] = useState('');
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [price, setPrice] = useState("");
   const [image, setImage] = useState<string | null>(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const iconRef = useRef(null);
@@ -14,9 +25,13 @@ const EditToiletScreen = () => {
   // Тежко ChatPGT за снимката
   // ако ви даде error -> expo install expo-image-picker
   const pickImage = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permissionResult.granted === false) {
-      Alert.alert("Permission required", "Permission to access gallery is required!");
+      Alert.alert(
+        "Permission required",
+        "Permission to access gallery is required!"
+      );
       return;
     }
 
@@ -33,9 +48,9 @@ const EditToiletScreen = () => {
   };
 
   const handleDropdownPress = (action: string) => {
-    if (action === 'add') {
+    if (action === "add") {
       pickImage();
-    } else if (action === 'remove') {
+    } else if (action === "remove") {
       setImage(null);
     }
     setDropdownVisible(false);
@@ -46,21 +61,18 @@ const EditToiletScreen = () => {
       <View style={styles.container}>
         <Text style={styles.title}>Edit Toilet</Text>
 
-        <Text style={styles.label}>Name</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter toilet name"
-          value={name}
-          onChangeText={setName}
-        />
-
         <Text style={styles.label}>Address</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter address"
-          value={address}
-          onChangeText={setAddress}
-        />
+        <View style={styles.addressInputs}>
+          <TextInput
+            style={[styles.input, styles.addressText]}
+            placeholder="Enter address"
+            value={address}
+            onChangeText={setAddress}
+          />
+          <TouchableOpacity style={styles.addressButton}>
+            <Text style={styles.addressButtonText}>Pick from map</Text>
+          </TouchableOpacity>
+        </View>
 
         <Text style={styles.label}>Price</Text>
         <TextInput
@@ -73,17 +85,26 @@ const EditToiletScreen = () => {
 
         <View style={styles.imageUploadContainer}>
           <Text style={styles.label}>Upload Image</Text>
-          <TouchableOpacity onPress={() => setDropdownVisible(!dropdownVisible)} ref={iconRef}>
-            <Ionicons name="ellipsis-vertical" size={20} color='#555'/>
+          <TouchableOpacity
+            onPress={() => setDropdownVisible(!dropdownVisible)}
+            ref={iconRef}
+          >
+            <Ionicons name="ellipsis-vertical" size={20} color="#555" />
           </TouchableOpacity>
         </View>
 
         {dropdownVisible && (
           <View style={styles.dropdown}>
-            <TouchableOpacity style={styles.dropdownItem} onPress={() => handleDropdownPress('add')}>
+            <TouchableOpacity
+              style={styles.dropdownItem}
+              onPress={() => handleDropdownPress("add")}
+            >
               <Text style={styles.dropdownItemText}>Add Image</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.dropdownItem} onPress={() => handleDropdownPress('remove')}>
+            <TouchableOpacity
+              style={styles.dropdownItem}
+              onPress={() => handleDropdownPress("remove")}
+            >
               <Text style={styles.dropdownItemText}>Remove Image</Text>
             </TouchableOpacity>
           </View>
@@ -98,7 +119,12 @@ const EditToiletScreen = () => {
         </TouchableOpacity>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => { /* Тук ще вкараме кода, което ще запазва промените */ }} style={styles.saveButton}>
+          <TouchableOpacity
+            onPress={() => {
+              /* Тук ще вкараме кода, което ще запазва промените */
+            }}
+            style={styles.saveButton}
+          >
             <Text style={styles.saveButtonText}>Save Changes</Text>
           </TouchableOpacity>
         </View>
@@ -111,78 +137,99 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+  addressInputs: {
+    flexDirection: "row",
   },
-  label: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginTop: 10,
-    color: '#555',
+  addressText: {
+    flex: 7,
+    marginRight: 10,
   },
-  input: {
-    height: 40,
-    borderColor: '#ccc',
+  addressButton: {
+    flex: 3,
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginTop: 5,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#00A2FF",
+  },
+  addressButtonText: {
+    color: "#fff",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginTop: 10,
+    color: "#555",
+  },
+  input: {
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginTop: 5,
+    backgroundColor: "#f9f9f9",
   },
   imageUploadContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 10,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   imagePicker: {
     marginTop: 10,
     height: 200,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderColor: '#ccc',
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 5,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#f9f9f9",
   },
   imagePickerText: {
-    color: '#888',
+    color: "#888",
     fontSize: 16,
   },
   imagePreview: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
     borderRadius: 5,
   },
   buttonContainer: {
     marginTop: 20,
     borderRadius: 5,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   saveButton: {
-    backgroundColor: '#00A2FF',
+    backgroundColor: "#00A2FF",
     padding: 10,
     borderRadius: 5,
-    alignItems: 'center',
+    alignItems: "center",
   },
   saveButtonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
   },
   dropdown: {
-    position: 'absolute',
+    position: "absolute",
     top: 350,
     right: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 5,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderWidth: 1,
     zIndex: 10,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 2,
@@ -191,7 +238,7 @@ const styles = StyleSheet.create({
   dropdownItem: {
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: "#ccc",
   },
   dropdownItemText: {
     fontSize: 16,

@@ -12,7 +12,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Feather from "@expo/vector-icons/Feather";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-import { padding } from "../scripts/utils";
+import { margin, padding } from "../scripts/utils";
 import { Link, usePathname } from "expo-router";
 
 export default function Header() {
@@ -100,6 +100,17 @@ export default function Header() {
           Register
         </Link>
         <Text style={styles.sidebarText}>Settings</Text>
+        <Text style={styles.sidebarText}>Help</Text>
+        <View
+          style={{ backgroundColor: "#000", height: 1, ...margin(10, 0) }}
+        />
+        <Link href="/" style={styles.sidebarText}>
+          Home
+        </Link>
+        <Link href="/MyToiletsScreen" style={styles.sidebarText}>
+          MyToilets
+        </Link>
+        <Text style={styles.sidebarText}>Log out</Text>
         <Text style={styles.sidebarText}>Help</Text>
       </Animated.View>
     </>
