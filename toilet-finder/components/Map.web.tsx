@@ -29,7 +29,7 @@ export default function Map() {
   //#region Load Toilets
   useEffect(() => {
     $.ajax({
-      url: "http://localhost/My%20sites/Toilet%20Finder%20Server/api/get_toilets.php",
+      url: "http://localhost/My%20sites/Toilet%20Finder%20Server/api/get_toilets.php", //#region fix this link
       type: "POST",
       success: (data) => {
         const _toilets: ToiletData[] = JSON.parse(data).map(
