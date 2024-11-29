@@ -15,7 +15,7 @@ export default function LoginScreen() {
 
   const handleLogin: (event: GestureResponderEvent) => void = (e) => {
     $.ajax({
-      url: "http://localhost/My%20sites/Toilet%20Finder%20Server/api/login.php",
+      url: "http://localhost/Toilet%20Finder%20Server/api/login.php",
       type: "POST",
       data: {
         email: email,

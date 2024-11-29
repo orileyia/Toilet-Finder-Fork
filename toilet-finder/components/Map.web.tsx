@@ -18,7 +18,7 @@ import {
 const toiletPinPath = "../assets/images/toilet-pin.png";
 
 mapboxgl.accessToken =
-  "pk.eyJ1IjoiaG9nb3RvIiwiYSI6ImNsM3B2ZWkyMjA2YXUzam1zcHZtazlpbXkifQ.O37qtLHrUTSjH91IveGMOg";
+  "pk.eyJ1IjoiaXZhdHIiLCJhIjoiY20zejEzamNxMDAxaTJqc2cxMjE2NG9tNiJ9.KKlxlVtitAqWQsZYMeB7FA";
 
 const startCoordinate: Coordinate = [27.910543, 43.204666]; // Varna
 
@@ -29,7 +29,7 @@ export default function Map() {
   //#region Load Toilets
   useEffect(() => {
     $.ajax({
-      url: "http://localhost/My%20sites/Toilet%20Finder%20Server/api/get_toilets.php", //#region fix this link
+      url: "http://localhost/Toilet%20Finder%20Server/api/get_toilets.php", //#region fix this link
       type: "POST",
       success: (data) => {
         const _toilets: ToiletData[] = JSON.parse(data).map(

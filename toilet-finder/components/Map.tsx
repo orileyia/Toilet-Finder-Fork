@@ -68,7 +68,7 @@ const toiletsData = [
 ];
 
 Mapbox.setAccessToken(
-  "pk.eyJ1IjoiaG9nb3RvIiwiYSI6ImNsM3B2ZWkyMjA2YXUzam1zcHZtazlpbXkifQ.O37qtLHrUTSjH91IveGMOg"
+  "pk.eyJ1IjoiaXZhdHIiLCJhIjoiY20zejEzamNxMDAxaTJqc2cxMjE2NG9tNiJ9.KKlxlVtitAqWQsZYMeB7FA"
 );
 
 const startCoordinate = [27.910543, 43.204666]; // Varna
