@@ -1,30 +1,39 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  GestureResponderEvent,
+  Alert,
 } from "react-native";
-import $ from "jquery";
+import { login } from "../api.js"; // Import the login function from api.ts
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-export default function LoginScreen() {
-  const [email, setEmail] = useState("");
-  const [password, setPass] = useState("");
+type RootStackParamList = {
+  Login: undefined;
+  Home: undefined; // Add other screens as needed
+};
 
-  const handleLogin: (event: GestureResponderEvent) => void = (e) => {
-    $.ajax({
-      url: "http://localhost/Toilet%20Finder%20Server/api/login.php",
-      type: "POST",
-      data: {
-        email: email,
-        password: password,
-      },
-      success: (d) => {
-        console.log(d);
-      },
-    });
+type LoginScreenProps = NativeStackScreenProps<RootStackParamList, "Login">;
+
+const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const handleLogin = async () => {
+    try {
+      const result = await login(email, password); // Call the API function
+      if (result) {
+        Alert.alert("Success", "Login successful!");
+        navigation.navigate("Home"); // Navigate to the "Home" screen
+      } else {
+        Alert.alert("Error", "Invalid credentials or login failed!");
+      }
+    } catch (error: any) {
+      console.error("Login error:", error.message);
+      Alert.alert("Error", error.message || "Something went wrong!");
+    }
   };
 
   return (
@@ -32,9 +41,11 @@ export default function LoginScreen() {
       <Text style={styles.title}>Login Form</Text>
       <TextInput
         style={styles.input}
-        placeholder="Username"
+        placeholder="Email"
         placeholderTextColor="#999"
         autoCapitalize="none"
+        keyboardType="email-address"
+        value={email}
         onChangeText={setEmail}
       />
       <TextInput
@@ -43,14 +54,15 @@ export default function LoginScreen() {
         placeholderTextColor="#999"
         secureTextEntry
         autoCapitalize="none"
-        onChangeText={setPass}
+        value={password}
+        onChangeText={setPassword}
       />
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -90,3 +102,5 @@ const styles = StyleSheet.create({
     fontFamily: "cursive",
   },
 });
+
+export default LoginScreen;

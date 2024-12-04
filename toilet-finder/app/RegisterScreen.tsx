@@ -1,18 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  GestureResponderEvent,
+  Alert,
 } from "react-native";
 
-const handleRegister: (event: GestureResponderEvent) => void = (e) => {
-  console.log("tried to register");
-};
-
 export default function RegisterScreen() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleRegister = async () => {
+    if (password !== confirmPassword) {
+      Alert.alert("Error", "Passwords do not match!");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost/Toilet%20Finder%20Server/api/register.php", {
+        method: "POST",
+        headers: {  
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uname: username,
+          password: password,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result === true) {
+        Alert.alert("Success", "User registered successfully!");
+      } else {
+        Alert.alert("Error", "Registration failed!");
+      }
+    } catch (error) {
+      Alert.alert("Error", "Something went wrong!");
+      console.error(error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Register Form</Text>
@@ -21,13 +52,18 @@ export default function RegisterScreen() {
         placeholder="Username"
         placeholderTextColor="#999"
         autoCapitalize="none"
+        value={username}
+        onChangeText={setUsername}
       />
+      
       <TextInput
         style={styles.input}
         placeholder="Password"
         placeholderTextColor="#999"
         secureTextEntry
         autoCapitalize="none"
+        value={password}
+        onChangeText={setPassword}
       />
       <TextInput
         style={styles.input}
@@ -35,6 +71,8 @@ export default function RegisterScreen() {
         placeholderTextColor="#999"
         secureTextEntry
         autoCapitalize="none"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
       />
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
         <Text style={styles.buttonText}>Register</Text>
