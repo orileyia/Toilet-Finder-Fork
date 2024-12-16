@@ -18,7 +18,7 @@ const ProfileSchema = new mongoose.Schema({
 const Profile = mongoose.model('Profile', ProfileSchema);
 
 
-mongoose.connect('mongodb://localhost:27017/tasknet', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://localhost:27017/toilet-finder', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB'))
   .catch((error) => console.error('Could not connect to MongoDB:', error));
 
@@ -27,24 +27,24 @@ app.use(bodyParser.json());
 
 const JWT_SECRET = 'your-secret-key';
 
-// Mongoose models
-const UserSchema = new mongoose.Schema({
-  name: String,
-  email: { type: String, unique: true },
-  password: String,
+const mongoose = require('mongoose');
+
+// Define the Toilet Schema
+const ToiletSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  address: { type: String, required: true },
+  stars: { type: Number, min: 1, max: 5, required: true },
+  price: { type: Number, required: true }, // Use 0 for free
+  image: { type: String, required: true },
+  coordinates: {
+    longitude: { type: Number, required: true },
+    latitude: { type: Number, required: true },
+  },
+  creatorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 });
 
-const JobSchema = new mongoose.Schema({
-  title: String,
-  description: String,
-  category: String,
-  budget: Number,
-  deadline: Date,
-  userId: mongoose.Schema.Types.ObjectId,
-});
+const Toilet = mongoose.model('Toilet', ToiletSchema);
 
-const User = mongoose.model('User', UserSchema);
-const Job = mongoose.model('Job', JobSchema);
 
 // Helper function to generate JWT
 const generateToken = (user) => {
@@ -66,66 +66,6 @@ const verifyToken = (req, res, next) => {
     next();
   });
 };
-// Add these routes to your existing routes
-
-// Create profile
-app.post('/api/profiles', verifyToken, async (req, res) => {
-  try {
-    const { bio, skills } = req.body;
-    const newProfile = new Profile({
-      userId: req.userId,
-      bio,
-      skills,
-    });
-    await newProfile.save();
-    res.status(201).send(newProfile);
-  } catch (error) {
-    res.status(500).send({ message: 'Error creating profile', error: error.message });
-  }
-});
-
-// Get profile
-app.get('/api/profiles/:userId', async (req, res) => {
-  try {
-    const profile = await Profile.findOne({ userId: req.params.userId });
-    if (!profile) return res.status(404).send({ message: 'Profile not found' });
-    res.status(200).send(profile);
-  } catch (error) {
-    res.status(500).send({ message: 'Error fetching profile', error: error.message });
-  }
-});
-
-// Update profile
-app.put('/api/profiles', verifyToken, async (req, res) => {
-  try {
-    const { bio, skills } = req.body;
-    const updatedProfile = await Profile.findOneAndUpdate(
-      { userId: req.userId },
-      { bio, skills },
-      { new: true, upsert: true }
-    );
-    res.status(200).send(updatedProfile);
-  } catch (error) {
-    res.status(500).send({ message: 'Error updating profile', error: error.message });
-  }
-});
-
-// Admin route to verify a profile
-app.put('/api/profiles/:userId/verify', verifyToken, async (req, res) => {
-  try {
-    // Here you should add a check to ensure the user is an admin
-    const updatedProfile = await Profile.findOneAndUpdate(
-      { userId: req.params.userId },
-      { isVerified: true },
-      { new: true }
-    );
-    if (!updatedProfile) return res.status(404).send({ message: 'Profile not found' });
-    res.status(200).send(updatedProfile);
-  } catch (error) {
-    res.status(500).send({ message: 'Error verifying profile', error: error.message });
-  }
-});
-
 
 
 
@@ -174,53 +114,82 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-app.post('/api/jobs', verifyToken, async (req, res) => {
+// Create a new toilet
+app.post('/api/toilets', verifyToken, async (req, res) => {
   try {
-    const { title, description, category, budget, deadline } = req.body;
-    const newJob = new Job({
-      title,
-      description,
-      category,
-      budget,
-      deadline,
-      userId: req.userId,
+    const { name, address, stars, price, image, coordinates } = req.body;
+    const newToilet = new Toilet({
+      name,
+      address,
+      stars,
+      price,
+      image,
+      coordinates,
+      creatorId: req.userId,
     });
-    await newJob.save();
-    res.status(201).send(newJob);
+    await newToilet.save();
+    res.status(201).send(newToilet);
   } catch (error) {
-    res.status(500).send({ message: 'Error creating job', error: error.message });
+    res.status(500).send({ message: 'Error creating toilet', error: error.message });
   }
 });
 
-app.get('/api/jobs', async (req, res) => {
+// Get all toilets
+app.get('/api/toilets', async (req, res) => {
   try {
-    const jobs = await Job.find();
-    res.status(200).send(jobs);
+    const toilets = await Toilet.find();
+    res.status(200).send(toilets);
   } catch (error) {
-    res.status(500).send({ message: 'Error fetching jobs', error: error.message });
+    res.status(500).send({ message: 'Error fetching toilets', error: error.message });
   }
 });
 
-app.get('/api/jobs/:id', async (req, res) => {
+// Get a single toilet by ID
+app.get('/api/toilets/:id', async (req, res) => {
   try {
-    const job = await Job.findById(req.params.id);
-    if (!job) return res.status(404).send({ message: 'Job not found' });
-    res.status(200).send(job);
+    const toilet = await Toilet.findById(req.params.id);
+    if (!toilet) return res.status(404).send({ message: 'Toilet not found' });
+    res.status(200).send(toilet);
   } catch (error) {
-    res.status(500).send({ message: 'Error fetching job', error: error.message });
+    res.status(500).send({ message: 'Error fetching toilet', error: error.message });
   }
 });
 
-app.delete('/api/jobs/:id', verifyToken, async (req, res) => {
+// Update a toilet
+app.put('/api/toilets/:id', verifyToken, async (req, res) => {
   try {
-    const job = await Job.findById(req.params.id);
-    if (!job) return res.status(404).send({ message: 'Job not found' });
-    if (job.userId.toString() !== req.userId) return res.status(403).send({ message: 'Unauthorized' });
-    
-    await Job.findByIdAndDelete(req.params.id);
-    res.status(200).send({ message: 'Job deleted successfully' });
+    const { name, address, stars, price, image, coordinates } = req.body;
+    const toilet = await Toilet.findById(req.params.id);
+    if (!toilet) return res.status(404).send({ message: 'Toilet not found' });
+    if (toilet.creatorId.toString() !== req.userId)
+      return res.status(403).send({ message: 'Unauthorized' });
+
+    toilet.name = name || toilet.name;
+    toilet.address = address || toilet.address;
+    toilet.stars = stars || toilet.stars;
+    toilet.price = price || toilet.price;
+    toilet.image = image || toilet.image;
+    toilet.coordinates = coordinates || toilet.coordinates;
+
+    await toilet.save();
+    res.status(200).send(toilet);
   } catch (error) {
-    res.status(500).send({ message: 'Error deleting job', error: error.message });
+    res.status(500).send({ message: 'Error updating toilet', error: error.message });
+  }
+});
+
+// Delete a toilet
+app.delete('/api/toilets/:id', verifyToken, async (req, res) => {
+  try {
+    const toilet = await Toilet.findById(req.params.id);
+    if (!toilet) return res.status(404).send({ message: 'Toilet not found' });
+    if (toilet.creatorId.toString() !== req.userId)
+      return res.status(403).send({ message: 'Unauthorized' });
+
+    await Toilet.findByIdAndDelete(req.params.id);
+    res.status(200).send({ message: 'Toilet deleted successfully' });
+  } catch (error) {
+    res.status(500).send({ message: 'Error deleting toilet', error: error.message });
   }
 });
 

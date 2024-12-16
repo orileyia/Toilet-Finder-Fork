@@ -92,3 +92,4 @@ export function findClosestToilet(userLocation: Coordinate, toilets: ToiletData[
   
   return closestCoordinate; // Return the closest coordinate
 }
+
