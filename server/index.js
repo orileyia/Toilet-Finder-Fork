@@ -27,7 +27,6 @@ app.use(bodyParser.json());
 
 const JWT_SECRET = 'your-secret-key';
 
-const mongoose = require('mongoose');
 
 // Define the Toilet Schema
 const ToiletSchema = new mongoose.Schema({
