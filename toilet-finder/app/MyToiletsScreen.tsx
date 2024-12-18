@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  Button,
   FlatList,
   StyleSheet,
   TouchableOpacity,
@@ -16,14 +15,14 @@ type Post = {
 };
 
 export default function MyToiletsScreen() {
-  const [posts, setPosts] = useState<Post[] | never[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
 
   const addPost = () => {
     const newPost = {
       id: posts.length + 1,
       title: `Photo ${posts.length + 1}`,
     };
-    setPosts([...posts, newPost]);
+    setPosts([newPost, ...posts]);
   };
 
   const renderItem: ListRenderItem<Post> = ({ item }) => (
@@ -46,6 +45,7 @@ export default function MyToiletsScreen() {
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.postsContainer}
         showsHorizontalScrollIndicator={false}
+        numColumns={3}
       />
 
       <TouchableOpacity style={styles.addButton} onPress={addPost}>
@@ -74,20 +74,25 @@ const styles = StyleSheet.create({
   },
   post: {
     alignItems: "center",
-    marginVertical: 10,
+    margin: '2%', // Adjust margin for spacing (percentage)
     padding: 10,
     borderWidth: 1,
     borderColor: "#ddd",
     borderRadius: 8,
+    flex: 1,
+    height: 350,
+    width: 350,
+    overflow: 'hidden', // Prevent overflow
   },
   postTitle: {
     fontSize: 18,
     marginTop: 8,
   },
   image: {
-    width: 300,
-    height: 300,
+    width: "100%", // Set width of the image to fill the container
+    height: 300, // Set a fixed height for the image
     borderRadius: 8,
+    resizeMode: 'cover', // Ensure the image covers the area without distortion
   },
   addButton: {
     backgroundColor: "#2196F3",
