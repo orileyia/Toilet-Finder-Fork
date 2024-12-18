@@ -278,6 +278,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
+    position: 'absolute',
+    top: '20%',
+    left: '15%',
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
