@@ -21,6 +21,7 @@ const EditToiletScreen = () => {
   const [longitude, setLongitude] = useState("");
   const [latitude, setLatitude] = useState("");
   const [rating, setRating] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const pickImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -116,6 +117,9 @@ const EditToiletScreen = () => {
               style={styles.wrapper}
               showsButtons={true}
               loop={false}
+              onIndexChanged={(index) => setCurrentIndex(index)}
+              nextButton={currentIndex < images.length - 1 ? <Text style={styles.buttonText}>›</Text> : null}
+              prevButton={currentIndex > 0 ? <Text style={styles.buttonText}>‹</Text> : null}
             >
               {images.map((image, index) => (
                 <View style={styles.slide} key={index}>
@@ -163,6 +167,11 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginTop: 10,
     color: "#555",
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 30,
+    padding: 10,
   },
   input: {
     height: 50,
